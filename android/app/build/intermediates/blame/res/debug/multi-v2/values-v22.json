@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/anderson/Documents/Faculdade/Estudos/Git/Tasks-offline-com-react-native/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v22/values-v22.xml",
+            "map": [
+                {
+                    "source": "/home/anderson/.gradle/caches/transforms-2/files-2.1/468c6bd4f6e6efbb6f3518b7d17b50b4/res/values-v22/values-v22.xml",
+                    "from": {
+                        "startLines": "2,3,4,9",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,130,217,553",
+                        "endLines": "2,3,8,13",
+                        "endColumns": "74,86,12,12",
+                        "endOffsets": "125,212,548,896"
+                    }
+                }
+            ]
+        }
+    ]
+}
