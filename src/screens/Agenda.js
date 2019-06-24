@@ -3,7 +3,9 @@ import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import todayImage from '../../assets/imgs/today.jpg'
-import commonStyle from    '../commonStyle'
+import commonStyle from    '../commonStyles'
+import Task from '../component/Task'
+
 
 export default class Agenda extends Component {
     render() {
@@ -18,9 +20,26 @@ export default class Agenda extends Component {
                     </View>
                 </ImageBackground>
                 <View style={style.taksContainer}>
-                    <Text>Tarefa 1</Text>
-                    <Text>Tarefa 2</Text>
-                    <Text>Tarefa 3</Text>
+                    <Task desc='Tarefas pendentes'
+                        estimateAt={new Date()} doneAt={null} />
+                    <Task desc='Tarefa concluida'
+                        estimateAt={new Date()} doneAt={new Date()} />
+                    <Task desc='Tarefas pendentes'
+                        estimateAt={new Date()} doneAt={null} />
+                    <Task desc='Tarefa concluida'
+                        estimateAt={new Date()} doneAt={new Date()} />
+                    <Task desc='Tarefas pendentes'
+                        estimateAt={new Date()} doneAt={null} />
+                    <Task desc='Tarefa concluida'
+                        estimateAt={new Date()} doneAt={new Date()} />
+                    <Task desc='Tarefas pendentes'
+                        estimateAt={new Date()} doneAt={null} />
+                    <Task desc='Tarefa concluida'
+                        estimateAt={new Date()} doneAt={new Date()} />
+                    <Task desc='Tarefas pendentes'
+                        estimateAt={new Date()} doneAt={null} />
+                    <Task desc='Tarefa concluida'
+                        estimateAt={new Date()} doneAt={new Date()} />                
                 </View>
             </View>
         )

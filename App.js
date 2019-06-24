@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import commonStyle from './src/commonStyle'
+import commonStyle from './src/commonStyles'
 
 export default class App extends Component{
   render() {
