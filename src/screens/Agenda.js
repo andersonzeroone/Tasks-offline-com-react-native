@@ -14,6 +14,8 @@ import todayImage from '../../assets/imgs/today.jpg'
 import commonStyles from '../commonStyles'
 import Task from '../component/Task'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ActionButton from 'react-native-action-button'
+import AddTask from './AddTasks'
 
 export default class Agenda extends Component {
     state = {
@@ -73,7 +75,21 @@ export default class Agenda extends Component {
         ],
         visibleTasks: [],
         showDonetasks: true,
+        showAddTask:false,
     }
+
+    addTask = task => {
+        const tasks = [ ...this.state.tasks ]
+        tasks.push({
+            id: Math.random(),
+            desc: task.desc,
+            estimateAt: task.date,
+            doneAt: null
+        })
+
+        this.setState({ tasks, showAddTask: false}, this.filterTasks)
+    }
+    
     filterTasks= () => {
         let visibleTasks= null
         if ( this.state.showDonetasks) {
@@ -109,6 +125,10 @@ export default class Agenda extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <AddTask isVisible={this.state.showAddTask}
+                    onSave={this.addTask}
+                    onCancel={() => this.setState({ showAddTask:false })}>
+                </AddTask>
                 <ImageBackground source={todayImage} 
                     style={styles.background}>
                     <View style={styles.iconBar}>
@@ -128,9 +148,12 @@ export default class Agenda extends Component {
                 <View style={styles.taksContainer}>
                     <FlatList data={this.state.visibleTasks}
                         keyExtractor={item => `${item.id}`}
-                        renderItem={({ item }) => <Task {...item} toggleTask={this.toggleTask} />} >
+                        renderItem={({ item }) => 
+                            <Task {...item} toggleTask={this.toggleTask} />} >
                     </FlatList>
                 </View>
+                <ActionButton buttonColor={commonStyles.colors.today}
+                    onPress={() => { this.setState({ showAddTask: true }) }} />
             </View>
         )
     }
