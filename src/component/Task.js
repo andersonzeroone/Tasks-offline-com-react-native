@@ -9,13 +9,14 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import moment from  'moment'
 import 'moment/locale/pt-br'
 import commonStyles from  '../commonStyles'
+import Swipeable from 'react-native-swipeable'
 
 export default props => {
     let check = null
     if (props.doneAt !== null){
         check = (
             <View style={styles.done}>
-                <Icon name='check' size={20}
+                <Icon name='check' size={20}  color={commonStyles.colors.secondary}
                     color={commonStyles.colors.secondary} />
             </View>
         )
@@ -26,17 +27,34 @@ export default props => {
     const descStyle = props.doneAt !== null ?
          {textDecorationLine: 'line-through' } : {}
 
-    
-    return (
-        <View style={styles.container}>
-            <TouchableNativeFeedback onPress={() => props.toggleTask(props.id)}>
-                <View style={styles.checkContainer}>{check}</View>
-            </TouchableNativeFeedback>
-            <View>
-                <Text style={[styles.description, descStyle]}>{props.desc}</Text>
-                <Text style={styles.date}>{moment(props.estimateAt).locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')}</Text>
-            </View>
+    const leftContent = (
+        <View style={ styles.exclude}>
+            <Icon name= 'trash' size={20} color= '#FFF'></Icon>
+            <Text style={styles.excludeText}>Excluir</Text>
         </View>
+    )
+
+    const rightContent = [
+        <TouchableOpacity
+            style={[styles.exclude, { justifyContent: 'flex-start', paddingLeft: 20}]}
+                onPress={() => props.onDelete(props.id)}>
+                <Icon name= 'trash' size={20} color= '#FFF'></Icon>
+        </TouchableOpacity>
+    ]
+    return (
+        <Swipeable leftActionActivationDistance={200}
+            onLeftActionActivate={() => props.onDelete(props.id)}
+            leftContent={leftContent} rightButtons={rightContent}>
+            <View style={styles.container}>
+                <TouchableNativeFeedback onPress={() => props.onToggleTask(props.id)}>
+                    <View style={styles.checkContainer}>{check}</View>
+                </TouchableNativeFeedback>
+                <View>
+                    <Text style={[styles.description, descStyle]}>{props.desc}</Text>
+                    <Text style={styles.date}>{moment(props.estimateAt).locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')}</Text>
+                </View>
+            </View>
+        </Swipeable>
     )
 }
 
@@ -75,5 +93,18 @@ const styles = StyleSheet.create({
     date: {
         fontFamily: commonStyles.fontFamily,
         color: commonStyles.colors.subText,
+    },
+    exclude: {
+        flex: 1,
+        backgroundColor: 'red',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    excludeText: {
+        fontFamily: commonStyles.fontfamily,
+        color: '#FFF',
+        fontSize: 20,
+        margin: 10,
+
     }
 })

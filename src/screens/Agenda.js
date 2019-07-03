@@ -6,7 +6,8 @@ import {
     ImageBackground,
     FlatList,
     TouchableOpacity,
-    Platform
+    Platform,
+    AsyncStorage
 } from 'react-native'
 import moment from 'moment'
 import 'moment/locale/pt-br'
@@ -19,60 +20,7 @@ import AddTask from './AddTasks'
 
 export default class Agenda extends Component {
     state = {
-        tasks: [
-            {
-                id: Math.random(), desc: 'Terminar modulo',
-                estimateAt: new Date(), doneAt: new Date()
-            },
-            {
-                id: Math.random(), desc: 'Concluir',
-                estimateAt: new Date(), doneAt: null
-            },
-            {
-                id: Math.random(), desc: 'Terminar modulo',
-                estimateAt: new Date(), doneAt: new Date()
-            },
-            {
-                id: Math.random(), desc: 'Concluir',
-                estimateAt: new Date(), doneAt: null
-            },
-            {
-                id: Math.random(), desc: 'Terminar modulo',
-                estimateAt: new Date(), doneAt: new Date()
-            },
-            {
-                id: Math.random(), desc: 'Concluir',
-                estimateAt: new Date(), doneAt: null
-            },
-            {
-                id: Math.random(), desc: 'Terminar modulo',
-                estimateAt: new Date(), doneAt: new Date()
-            },
-            {
-                id: Math.random(), desc: 'Concluir',
-                estimateAt: new Date(), doneAt: null
-            },
-            {
-                id: Math.random(), desc: 'Concluir',
-                estimateAt: new Date(), doneAt: null
-            },
-            {
-                id: Math.random(), desc: 'Terminar modulo',
-                estimateAt: new Date(), doneAt: new Date()
-            },
-            {
-                id: Math.random(), desc: 'Concluir',
-                estimateAt: new Date(), doneAt: null
-            },
-            {
-                id: Math.random(), desc: 'Terminar modulo',
-                estimateAt: new Date(), doneAt: new Date()
-            },
-            {
-                id: Math.random(), desc: 'Concluir',
-                estimateAt: new Date(), doneAt: null
-            },
-        ],
+        tasks: [],
         visibleTasks: [],
         showDonetasks: true,
         showAddTask:false,
@@ -90,6 +38,10 @@ export default class Agenda extends Component {
         this.setState({ tasks, showAddTask: false}, this.filterTasks)
     }
     
+    deleteTask = id => {
+        const tasks = this.state.tasks.filter( task => task.id !== id)
+        this.setState({ tasks }, this.filterTasks)
+    }
     filterTasks= () => {
         let visibleTasks= null
         if ( this.state.showDonetasks) {
@@ -99,6 +51,7 @@ export default class Agenda extends Component {
             visibleTasks = this.state.tasks.filter(pending)
         }
         this.setState({ visibleTasks })
+        AsyncStorage.setItem('tasks', JSON.stringify(this.state.tasks))
     }
 
     toggleFilter = () => {
@@ -106,11 +59,14 @@ export default class Agenda extends Component {
              this.filterTasks)
     }
 
-    componentDidMount = () => {
-        this.filterTasks()
+    componentDidMount = async() => {
+        const data = await AsyncStorage.getItem('tasks')
+        const tasks = JSON.parse(data) || []
+        this.setState({ tasks }, this.filterTasks)
+        
     }
 
-    toggleTask = id => {
+    onToggleTask = id => {
         const  tasks = this.state.tasks.map(task => {
             if(task.id === id ){
                 task = { ...task }
@@ -149,7 +105,8 @@ export default class Agenda extends Component {
                     <FlatList data={this.state.visibleTasks}
                         keyExtractor={item => `${item.id}`}
                         renderItem={({ item }) => 
-                            <Task {...item} toggleTask={this.toggleTask} />} >
+                            <Task {...item} onToggleTask={this.onToggleTask} 
+                                onDelete={this.deleteTask} />} >
                     </FlatList>
                 </View>
                 <ActionButton buttonColor={commonStyles.colors.today}
